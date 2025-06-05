@@ -10,7 +10,7 @@ from time import sleep
 import base64
 import datetime
 
-from config import STREAMS, OLLAMA_HOST, OLLAMA_MODEL, NTFY_CHANNEL
+from config import STREAMS, OLLAMA_HOST, OLLAMA_MODEL, NTFY_CHANNEL, Config
 
 BOUNDARY = "BLIPBOUNDARY"
 
@@ -44,9 +44,7 @@ to explain briefly what's suspicious in the frame you are given. This message \
 will be sent to the owners.
 
 Accurately describe the scene you see in the frame. DO NOT ANSWER ANYTHING \
-ELSE, no preamble, no greeting, no question at the end.
-
-MAKE IT SHORT!"""
+ELSE, no preamble, no greeting, no question at the end."""
 
 
 def save_suspicious_frame(frame):
@@ -247,14 +245,39 @@ def mainloop():
             if prompt_model(frame, okay_frames[stream], client):
                 print("Suspicious activity detected, explaining...")
 
+                try:
+                    requests.post(
+                        "http://localhost:5000/api/report",
+                        json={"message": "alarm", "secret_key": Config.SECRET_KEY},
+                        timeout=2
+                    )
+                except requests.RequestException as e:
+                    print("Failed to notify the web app:", e)
+
                 explanation = explain_danger(frame, client)
                 ring_alarm(explanation)
+
+                try:
+                    requests.post(
+                        "http://localhost:5000/api/report",
+                        json={"message": explanation, "secret_key": Config.SECRET_KEY},
+                        timeout=2
+                    )
+                except requests.RequestException as e:
+                    print("Failed to notify the web app:", e)
 
                 save_suspicious_frame(frame)
 
                 sleep(360)
-
-        sleep(4)
+            else:
+                try:
+                    requests.post(
+                        "http://localhost:5000/api/report",
+                        json={"message": "ok", "secret_key": Config.SECRET_KEY},
+                        timeout=2
+                    )
+                except requests.RequestException as e:
+                    print("Failed to notify the web app:", e)
 
 
 def start_background_job():

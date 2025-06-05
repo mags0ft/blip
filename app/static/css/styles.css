@@ -3,39 +3,104 @@
 * {
     font-family: "Inter", sans-serif !important;
     font-optical-sizing: auto;
-}
-
-.grid-container {
-    /* 2x2 grid */
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    width: 100%;
-    height: 100vh;
-}
-
-.grid-item {
-    /* Centered content */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
     color: white;
 }
 
-.grid-item>h2 {
-    /* Descriptions are placed above the video stream at the bottom right */
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
+body {
+    background: #002B2B;
+    background: linear-gradient(122deg, rgba(0, 43, 43, 1) 0%, rgba(7, 0, 22, 1) 50%, rgba(54, 0, 94, 1) 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    overflow-y: hidden;
 }
 
-.grid-item>img {
+.video-array {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.video-item {
+    width: 24em;
+}
+
+.video-item>h2 {
+    font-size: 1em;
+    opacity: 0.5;
+    text-align: center;
+    margin-top: 2em;
+}
+
+.video-item>img {
     /* Should take up the entire space in the grid cell */
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 32px;
+    box-shadow: 0 20px 30px black;
+}
+
+.title {
+    margin-top: 3em;
+    margin-bottom: 1em;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title > img {
+    width: 100%;
+    height: auto;
+    max-width: 8em;
+}
+
+.ai-guard {
+    background-color: rgba(128, 128, 128, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 32px;
+    padding: 1em;
+    display: flex;
+    gap: 1em;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.ai-guard > .left {
+    flex: 1;
+    display: flex;
+    align-items: start;
+}
+
+.ai-guard > .left > img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
+
+.ai-guard > .right {
+    flex: 10;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+}
+
+.ai-guard > .right > h2 {
+    opacity: 0.75;
+    margin-top: .25em;
+}
+
+.ai-guard > .right > p {
+    transition: 1s ease-in-out;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: center;
+    width: 70%;
+    margin: 0 auto;
 }

@@ -4,13 +4,34 @@
 
 <!-- Grid of video streams from local addresses, 2x2 -->
 
-<div class="grid-container">
-    {% for stream in streams %}
-    <div class="grid-item">
-        <h2>{{stream}}</h2>
-        <img src="{{stream}}/cam.mjpg" alt="Video stream from {{stream}}" class="video-stream">
-    </div>
-    {% endfor %}
+<div class="title">
+    <img src="{{url_for('static', filename='images/blip-logo.webp')}}" alt="Blip logo">
+
+    <h1>Live security video feeds</h1>
 </div>
 
+<div class="flex">
+
+    <div class="video-array">
+        {% for stream in streams %}
+        <div class="video-item">
+            <img src="{{stream}}/cam.mjpg" alt="Video stream from {{stream}}" class="video-stream" id="video-stream">
+            <h2>{{stream}}</h2>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="ai-guard" id="guard-container">
+        <div class="left">
+            <img src="{{url_for('static', filename='images/ai-icon.webp')}}" alt="AI icon">
+        </div>
+        <div class="right">
+            <h2>blip guard</h2>
+            <p id="guard-message">
+                Initializing...
+            </p>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

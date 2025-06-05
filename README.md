@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/blip-logo.webp" alt="blip logo" width="400">
+  <img src="./app/static/images/blip-logo.webp" alt="blip logo" width="400">
 </p>
 
 # Blip

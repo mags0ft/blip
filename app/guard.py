@@ -2,11 +2,13 @@
 This file downloads
 """
 
+import os
 from ollama import Client
 import requests
 from multiprocessing import Process
 from time import sleep
 import base64
+import datetime
 
 from config import STREAMS, OLLAMA_HOST, OLLAMA_MODEL, NTFY_CHANNEL
 
@@ -22,14 +24,15 @@ pets like cats and dogs. First, describe the scene you see accurately. Then,
 Check:
 - Are there any open doors in this frame?
 - Are there any people in this frame?
-- Are there any suspicious objects in this frame?
 - Is the frame black or does it seem like the camera has been masked?
-- Is there anything else that seems suspicious?
 
-Only if none of the above is true, respond with "[ALL CLEAR]".
+If none of the above is - with full certainty - true, respond with \
+"[ALL CLEAR]".
+
 If you see something that's definitely suspicious, respond with "[RING ALARM]".
 Ringing the alarm is an extremely expensive and serious action, so only do it \
-if you are 100% certain that a security breach is happening.
+if you are 100% certain that a security breach is happening. Do NOT do it if \
+you are uncertain, write [FLAG FRAME] instead and the frame is cared about.
 
 Before answering, engage in an elaborate thinking process where you check all \
 these points one by one. Talk to youself, do not rush."""
@@ -45,6 +48,21 @@ Accurately describe the scene you see in the frame. DO NOT ANSWER ANYTHING \
 ELSE, no preamble, no greeting, no question at the end.
 
 MAKE IT SHORT!"""
+
+
+def save_suspicious_frame(frame):
+    """
+    Saves the suspicious frame to a file.
+    This is useful for debugging and testing purposes.
+    """
+
+    if not os.path.isdir("suspicious-frames"):
+        os.mkdir("suspicious-frames")
+
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    with open(os.path.join("suspicious-frames", f"{timestamp}.jpg"), "wb") as f:
+        f.write(base64.b64decode(frame))
 
 
 def stream_to_url(stream):
@@ -151,6 +169,9 @@ def prompt_model(frame, client):
             return True
         elif "[ALL CLEAR]" in answer:
             return False
+        elif "[FLAG FRAME]" in answer:
+            print("Frame flagged, not ringing the alarm.")
+            return False
 
 
 def explain_danger(frame, client):
@@ -212,6 +233,8 @@ def mainloop():
 
                 explanation = explain_danger(frame, client)
                 ring_alarm(explanation)
+
+                save_suspicious_frame(frame)
 
                 sleep(360)
 

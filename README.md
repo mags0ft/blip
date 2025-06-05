@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./images/blip-logo.webp" alt="blip logo" width="400">
+</p>
+
 # Blip
 
 Blip is a small implementation of an AI-powered home security system.

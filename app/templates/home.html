@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Grid of video streams from local addresses, 2x2 -->
+
+<div class="grid-container">
+    {% for stream in streams %}
+    <div class="grid-item">
+        <h2>{{stream}}</h2>
+        <img src="{{stream}}/cam.mjpg" alt="Video stream from {{stream}}" class="video-stream">
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

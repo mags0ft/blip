@@ -1,0 +1,2 @@
+FLASK_APP=blip.py
+FLASK_DEBUG=0

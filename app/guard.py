@@ -27,9 +27,9 @@ Check:
 - Is there anything else that seems suspicious?
 
 Only if none of the above is true, respond with "[ALL CLEAR]".
-If you see something suspicious, respond with "[RING ALARM]". This is an \
-expensive operation, so only respond with "[RING ALARM]" if you are sure that \
-there is something suspicious in the frame.
+If you see something that's definitely suspicious, respond with "[RING ALARM]".
+Ringing the alarm is an extremely expensive and serious action, so only do it \
+if you are 100% certain that a security breach is happening.
 
 Before answering, engage in an elaborate thinking process where you check all \
 these points one by one. Talk to youself, do not rush."""

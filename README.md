@@ -18,7 +18,7 @@ The server needs to have Ollama installed and running. You can run the server wi
 flask run
 ```
 
-The model `qwen2.5vl:3b-q8_0` is used by default, but you can change this in the `.env` file.
+The model `gemma3:4b` is used by default, but you can change this in the `.env` file.
 
 Make sure to also have set the `SECRET_KEY` environment variable to a random string:
 

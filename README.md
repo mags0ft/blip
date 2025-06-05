@@ -14,7 +14,9 @@ The server needs to have Ollama installed and running. You can run the server wi
 flask run
 ```
 
-Make sure to have set the `SECRET_KEY` environment variable to a random string:
+The model `qwen2.5vl:3b-q8_0` is used by default, but you can change this in the `.env` file.
+
+Make sure to also have set the `SECRET_KEY` environment variable to a random string:
 
 ```bash
 # Generate a key, make sure to copy it and keep it secret!

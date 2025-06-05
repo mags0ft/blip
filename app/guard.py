@@ -17,22 +17,21 @@ BOUNDARY = "BLIPBOUNDARY"
 
 IDENTIFY_PROMPT = """You are a security guard.
 
-You are monitoring a live video stream from a camera. Your task is to \
-identify if there is anything suspicious in the frame you are given. Ignore \
-pets like cats and dogs. First, describe the scene you see accurately. Then,
+You are given two frames: The first one is guaranteed to be a safe, normal \
+state of the room observed. The next frame is a live feed from the camera.
 
-Check:
-- Are there any open doors in this frame?
-- Are there any people in this frame?
-- Is the frame black or does it seem like the camera has been masked?
+Your task is to identify if there is anything suspicious in the frame you are \
+given. Ignore pets like cats and dogs.
 
-If none of the above is - with full certainty - true, respond with \
-"[ALL CLEAR]".
+If a bag, jacket or any other object has moved, that's fine. But if a door is \
+suddenly open, or a person is in the frame, or something else is there that \
+is definitely not normal, then you should ring the alarm.
 
 If you see something that's definitely suspicious, respond with "[RING ALARM]".
-Ringing the alarm is an extremely expensive and serious action, so only do it \
-if you are 100% certain that a security breach is happening. Do NOT do it if \
-you are uncertain, write [FLAG FRAME] instead and the frame is cared about.
+Ringing the alarm is an EXTREMELY expensive and SERIOUS action, so only do it \
+if you are 100% CERTAIN that something is happening. NEVER ELSE!
+
+If everything is fine or just slightly off, respond with "[ALL CLEAR]".
 
 Before answering, engage in an elaborate thinking process where you check all \
 these points one by one. Talk to youself, do not rush."""
@@ -141,7 +140,7 @@ def download_frame(url):
     raise RuntimeError("Could not find a frame in the stream")
 
 
-def prompt_model(frame, client):
+def prompt_model(frame, okay_frame, client):
     """
     Prompts the Ollama model with the given frame.
     """
@@ -156,11 +155,21 @@ def prompt_model(frame, client):
                 },
                 {
                     "role": "user",
+                    "content": "This is how the place normally looks. If it \
+still looks like this, everything is fine.",
+                    "images": [okay_frame],
+                },
+                {
+                    "role": "user",
                     "content": "Is there anything suspicious in this frame?",
                     "images": [frame],
                 },
             ],
             stream=False,
+            options={
+                "temperature": 0.1,
+                "num_predict": 512,
+            }
         )["message"]["content"].strip()
 
         print("Model response:", answer)
@@ -216,8 +225,15 @@ def mainloop():
 
     client = Client(OLLAMA_HOST)
 
+    okay_frames = {k: "" for k in STREAMS}
+
     while True:
         for stream in STREAMS:
+            if okay_frames[stream] == "":
+                print("Downloading initial frame for", stream)
+                url = stream_to_url(stream)
+                okay_frames[stream] = download_frame(url)
+
             print("Downloading frame from", stream)
 
             url = stream_to_url(stream)
@@ -228,7 +244,7 @@ def mainloop():
                 continue
 
             print("Frame downloaded, prompting model...")
-            if prompt_model(frame, client):
+            if prompt_model(frame, okay_frames[stream], client):
                 print("Suspicious activity detected, explaining...")
 
                 explanation = explain_danger(frame, client)
@@ -238,7 +254,7 @@ def mainloop():
 
                 sleep(360)
 
-        sleep(8)
+        sleep(4)
 
 
 def start_background_job():

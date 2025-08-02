@@ -6,6 +6,9 @@
 
 Blip is a small implementation of an AI-powered home security system.
 
+> [!CAUTION]
+> Blip is still a highly experimental beta and more of a proof-of-concept than a working production software.
+
 Devices can be added to your local network - these can stream their camera feed to the local network by running a command like:
 
 ```bash

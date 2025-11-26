@@ -21,7 +21,7 @@ The server needs to have Ollama installed and running. You can run the server wi
 flask run
 ```
 
-The model `gemma3:4b` is used by default, but you can change this in the `.env` file. For example, some Qwen VL models may be interesting to explore, but performance varies from use case to use case. Make sure to use a small and fast model, as you would otherwise waste even more electricity than you already do.
+The model `qwen3-vl:4b` is used by default, but you can change this in the `.env` file. For example, some other/smaller Qwen VL models may be interesting to explore, but performance varies from use case to use case. Make sure to use a small and fast model, as you would otherwise waste even more electricity than you already do.
 
 Make sure to also have set the `SECRET_KEY` environment variable to a random string:
 

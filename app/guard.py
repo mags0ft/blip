@@ -1,5 +1,6 @@
 """
-This file downloads
+This file downloads images from the incoming streams and processes them using
+local LLMs. It acts as the "guard" to detect anomalies.
 """
 
 import os
